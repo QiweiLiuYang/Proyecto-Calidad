@@ -26,4 +26,4 @@ datos de ambos ficheros.
 * C#
 
 ## Licencia
-Este proyecto está bajo la licencia APACHE 2.0
+Este proyecto está bajo la licencia APACHE 2.0[Ver la licencia](LICENSE)
