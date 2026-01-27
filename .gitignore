@@ -1,0 +1,4 @@
+*.xlsx
+
+# Ignorar dependencias de composer
+vendor/
