@@ -1,4 +1,5 @@
 *.xlsx
+*.xml
 
 # Ignorar dependencias de composer
 vendor/
