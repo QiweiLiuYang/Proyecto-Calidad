@@ -78,7 +78,6 @@
         }
     }
     //print_r($mapaEncabezado0);
-    $indiceXMatriz = 0;
     // Bucle que obtiene todos los datos de cada fila
     for($fila = $filaInicioDatos0; $fila <= $ultimaFila; $fila++){
         $id = trim($hoja0->getCell($mapaEncabezado0['ID'] . $fila)->getValue());
@@ -90,7 +89,7 @@
         $mdas = trim($hoja0->getCell($mapaEncabezado0['MD-AS'] . $fila)->getValue());
         $prof = trim($hoja0->getCell($mapaEncabezado0['PROF'] . $fila)->getValue());
 
-        $datos0[$indiceXMatriz] = [
+        $datos0[] = [
             "id" => $id,
             "dpt" => $dpt,
             "dir" => $dir,
@@ -100,10 +99,8 @@
             "mdas" => $mdas,
             "prof" => $prof
         ];
-        $indiceXMatriz++;
     }
     // print_r($datos0);
-    // echo "\n";
 
     // Bucle para obtener donde empiezan los datos realmente en la hoja1, buscamos donde empieza la celda 'GRUP'
     foreach($hoja1->getRowIterator() as $fila){
