@@ -65,7 +65,11 @@
         }
 
         // Eliminamos duplicados porque el fichero xml contiene duplicados
-        $grupo = array_values(array_unique($grupo, SORT_REGULAR));
+        $grupoTemp = [];
+        foreach($grupo as $alu){
+            $grupoTemp[$alu['NIA']] = $alu;
+        }
+        $grupo = array_values($grupoTemp);
 
         // Orden alfabético en español
         $collator = collator_create('es_ES');
@@ -81,7 +85,7 @@
 
             return $comparar;
         });
-        // print_r($grupo);
+        print_r($grupo);
 
         $inicioRellenado = 36;
         foreach($grupo as $alu){
