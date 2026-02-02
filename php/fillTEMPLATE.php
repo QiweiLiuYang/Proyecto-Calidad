@@ -15,18 +15,18 @@
     $doc = IOFactory::load($plantillaCopia);
 
     // Rellenado de las celdas de la hoja 0
-    function rellenarHoja0($doc, $datos0, $datos1){
+    function rellenarHoja0($doc, $datos0, $datos1, $tutor){
         // Abrir la primera pestaña del Excel
         $hoja0 = $doc->getSheet(0);
 
-        $hoja0->setCellValue("G3", $datos1[39]['grup']);
-        $hoja0->setCellValue("G4", $datos1[39]['tutor']);
+        $hoja0->setCellValue("G3", $datos1[$tutor]['grup']);
+        $hoja0->setCellValue("G4", $datos1[$tutor]['tutor']);
         $inicioRellenado = 13;
         foreach($datos0 as $profesor){
             // print_r($profesor['grup']);
             // print_r($datos1[39]);
             //echo $profesor['grup'] . " " . $datos1[39]['grup'] . "   ";
-            if(str_contains($profesor['grup'], $datos1[39]['grup'])){
+            if(str_contains($profesor['grup'], $datos1[$tutor]['grup'])){
                 $hoja0->setCellValue("B" . $inicioRellenado, $profesor['mdas']);
                 $hoja0->setCellValue("C" . $inicioRellenado, $profesor['prof']);
                 $inicioRellenado++;
@@ -35,7 +35,7 @@
     }
     
     // Rellenado de las celdas de la hoja 3
-    function rellenarHoja2($doc, $ficheroAlumnos, $datos1){
+    function rellenarHoja2($doc, $ficheroAlumnos, $datos1, $tutor){
         // Abrir la tercera pestaña del Excel
         $hoja2 = $doc->getSheet(2);
 
@@ -43,7 +43,7 @@
         $grupo = [];
 
         // Curso al que va (primero o segundo)
-        $curso = $datos1[39]['grup'][0]/2 == 0 ? "1" : "2";
+        $curso = $datos1[$tutor]['grup'][0]/2 == 0 ? "1" : "2";
 
         // Formateado del nombre del curso para buscarlo en el fichero de alumnos
         $nombreGrupo = strtoupper(trim(substr($datos1[39]['grup'], 1)));
@@ -58,8 +58,7 @@
                     "apellido2" => (string)$alu['apellido2'],
                     "nombre" => (string)$alu['nombre'],
                     "nuss" => (int)$alu['nuss'],
-                    "repite" => (int)$alu['repite'],
-                    "informe_medico" => (string)$alu['informe_medico']
+                    "repite" => (int)$alu['repite']
                 ];
             }
         }
@@ -85,24 +84,26 @@
 
             return $comparar;
         });
-        print_r($grupo);
+        // print_r($grupo);
 
+        // Desde donde empieza la celda de los alumnos
         $inicioRellenado = 36;
+        
+        // Bucle para iniciar el rellenado de cada fila con sus datos
         foreach($grupo as $alu){
             $nombre = "{$alu['apellido1']} {$alu['apellido2']}, {$alu['nombre']}";
             $hoja2->setCellValue("B" . $inicioRellenado, $alu['NIA']);
             $hoja2->setCellValue("C" . $inicioRellenado, $nombre);
-            $hoja2->setCellValue("E" . $inicioRellenado, $alu['nuss']);
-            if($alu['informe_medico'] == "N") $hoja2->setCellValue("H" . $inicioRellenado, "NO");
-            else $hoja2->setCellValue("H" . $inicioRellenado, "SI");
-            if((int)$alu['repite'] > 0) $hoja2->setCellValue("J" . $inicioRellenado, "SI");
-            else $hoja2->setCellValue("J" . $inicioRellenado, "NO");
+            $hoja2->setCellValue("E" . $inicioRellenado, $alu['nuss'] ?? "no");
+            if((int)$alu['repite'] > 0) $hoja2->setCellValue("J" . $inicioRellenado, "Si");
+            else $hoja2->setCellValue("J" . $inicioRellenado, "No");
             $inicioRellenado++;
         }
     }
 
-    rellenarHoja0($doc, $datos0, $datos1);
-    rellenarHoja2($doc, $ficheroAlumnos, $datos1);
+    // Llamada a las funciones
+    rellenarHoja0($doc, $datos0, $datos1, 39);
+    rellenarHoja2($doc, $ficheroAlumnos, $datos1, 39);
 
     $guardar = IOFactory::createWriter($doc, "Xlsx");
     try {
