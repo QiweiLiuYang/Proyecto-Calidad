@@ -36,11 +36,17 @@
                             <form id="formularioLogin" class="mt-4"> <!--action="../php/login.php" method="POST"-->
                                 <div class="mb-3 row align-items-center">
                                     <label for="usuario" class="pe-3 col-3 col-form-label">Usuario:</label>
-                                    <input class="col-6" type="text" name="usuario" value="" required>
+                                    <input class="col-6" id="usuario" type="text" name="usuario" value="" required>
                                 </div>
                                 <div class="mb-3 row align-items-center">
                                     <label for="contrasena" class="pe-3 col-3 col-form-label">Contraseña:</label>
-                                    <input class="col-6" type="password" name="contrasena" value="" required>
+                                    <input class="col-6" id="contrasena" type="password" name="contrasena" value="" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label>
+                                        <input type="checkbox" name="recordar" value="si">
+                                        Mantener mi sesión abierta durante 10 horas
+                                    </label>
                                 </div>
                                 <div class="modal-footer border-red">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -68,8 +74,8 @@
 
     botonSubmit.addEventListener("click", function(e){
         e.preventDefault();
-        let usuario = formulario.usuario.value;
-        let contrasena = formulario.contrasena.value;
+        let usuario = document.getElementById("usuario").value;
+        let contrasena = document.getElementById("contrasena").value;
         
         if(usuario === "admin" && contrasena === "admin123"){
             botonLogin.style.display = "none";
