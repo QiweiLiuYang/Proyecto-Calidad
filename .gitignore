@@ -1,8 +1,0 @@
-*.xlsx
-*.xml
-
-# Permitir que se suba la plantilla
-!plantilla.xlsx
-
-# Ignorar dependencias de composer
-vendor/
