@@ -82,20 +82,28 @@
             method: 'POST',
             body: datos
         })
-        .then(res => res.json())
+        .then(res => {
+            if(res.ok){
+                return res.json();
+            } else {
+                throw new Error('Error en la solicitud');
+            }
+        })
         .then(data => {
             console.log(data);
-        });
-
-        // if(usuario === "admin" && contrasena === "admin123"){
-        //     botonLogin.style.display = "none";
-        //     formulario.submit();
-        // } else {
-        //     mensajeErrorLogin.style.display = "block";
-        //     setTimeout(() => {
-        //         mensajeErrorLogin.style.display = "none";
-        //     }, 1000)
-        // }
+            if(data.success){
+                botonLogin.style.display = "none";
+                let modal = bootstrap.Modal.getInstance(document.getElementById('modalLogin'));
+                modal.hide();
+            }
+        })
+        .catch(err => {
+            console.error('Error:', err);
+            mensajeErrorLogin.style.display = "block";
+            setTimeout(() => {
+                mensajeErrorLogin.style.display = "none";
+            }, 1000)
+        })
     });
 </script>
 </html>
