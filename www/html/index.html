@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="nav col-sm-12 col-md-auto me-5">
-                <button type="button" class="btn btn-login border-2 px-5 py-2 fs-3" data-bs-toggle="modal" data-bs-target="#modalLogin">Inicio sesión</button>
+                <button id="botonLogin" type="button" class="btn btn-login border-2 px-5 py-2 fs-3" data-bs-toggle="modal" data-bs-target="#modalLogin">Inicio sesión</button>
             </div>
             <div class="modal fade" id="modalLogin" tabindex="-1">
                 <div class="modal-dialog">
@@ -32,18 +32,19 @@
                         </div>
                         <div class="modal-body">
                             <h5>Introduce tus credenciales para acceder.</h5>
+                            <p id="mensajeErrorLogin" style="display: none;">Inicio de sesión fallido, intentalo de nuevo</p>
                             <form id="formularioLogin" class="mt-4"> <!--action="../php/login.php" method="POST"-->
                                 <div class="mb-3 row align-items-center">
                                     <label for="usuario" class="pe-3 col-3 col-form-label">Usuario:</label>
-                                    <input class="col-6" type="text" name="usuario" value="">
+                                    <input class="col-6" type="text" name="usuario" value="" required>
                                 </div>
                                 <div class="mb-3 row align-items-center">
                                     <label for="contrasena" class="pe-3 col-3 col-form-label">Contraseña:</label>
-                                    <input class="col-6" type="password" name="contrasena" value="">
+                                    <input class="col-6" type="password" name="contrasena" value="" required>
                                 </div>
                                 <div class="modal-footer border-red">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                    <button type="submit" class="btn btn-red border-red">Entrar</button>
+                                    <button type="submit" id="botonSubmit" class="btn btn-red border-red">Entrar</button>
                                 </div>
                             </form>
                         </div>
@@ -59,4 +60,26 @@
 
     </footer>
 </body>
+<script type="text/JavaScript">
+    let formulario = document.getElementById("formularioLogin");
+    let botonSubmit = document.getElementById("botonSubmit");
+    let mensajeErrorLogin = document.getElementById("mensajeErrorLogin");
+    let botonLogin = document.getElementById("botonLogin");
+
+    botonSubmit.addEventListener("click", function(e){
+        e.preventDefault();
+        let usuario = formulario.usuario.value;
+        let contrasena = formulario.contrasena.value;
+        
+        if(usuario === "admin" && contrasena === "admin123"){
+            botonLogin.style.display = "none";
+            formulario.submit();
+        } else {
+            mensajeErrorLogin.style.display = "block";
+            setTimeout(() => {
+                mensajeErrorLogin.style.display = "none";
+            }, 1000)
+        }
+    });
+</script>
 </html>
