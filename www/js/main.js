@@ -1,12 +1,11 @@
-let formulario = document.getElementById("formularioLogin");
-    let botonSubmit = document.getElementById("botonSubmit");
+window.onload = function(){
+    let formulario = document.getElementById("formularioLogin");
 
-    botonSubmit.addEventListener("click", function(e){
+    formulario.addEventListener("submit", function(e){
         e.preventDefault();
-        let usuario = document.getElementById("usuario").value;
-        let contrasena = document.getElementById("contrasena").value;
         
         let datos = new FormData(formulario);
+
         fetch('../php/login.php', {
             method: 'POST',
             body: datos
@@ -21,23 +20,32 @@ let formulario = document.getElementById("formularioLogin");
         .then(data => {
             console.log(data);
             if(data.success){
-                let divLogin = document.getElementById("divLogin");
-                divLogin.style.display = "none";
-                let botonLogin = document.getElementById("botonLogin");
-                botonLogin.style.display = "none";
-                let modal = bootstrap.Modal.getInstance(document.getElementById('modalLogin'));
-                modal.hide();
+                document.getElementById("divLogin").style.display = "none";
 
-                let divBienvenida = document.getElementById("divBienvenida");
-                divBienvenida.style.display = "block";
+                bootstrap.Modal.getInstance(document.getElementById('modalLogin')).hide();
+
+                document.getElementById("divBienvenida").style.display = "block";
             }
         })
         .catch(err => {
             console.error('Error:', err);
-            let mensajeErrorLogin = document.getElementById("mensajeErrorLogin");
-            mensajeErrorLogin.style.display = "block";
+            document.getElementById("mensajeErrorLogin").style.display = "block";
+
             setTimeout(() => {
-                mensajeErrorLogin.style.display = "none";
+                document.getElementById("mensajeErrorLogin").style.display = "none";
             }, 5000)
         })
     });
+
+    fetch('../php/sessionStatus.php')
+    .then(res => res.json())
+    .then(data => {
+        if(data.logged){
+            document.getElementById("divBienvenida").style.display = "block";
+            document.getElementById("divLogin").style.display = "none";
+        }else{
+            document.getElementById('divLogin').style.display = 'block';
+            document.getElementById('divBienvenida').style.display = 'none';
+        }
+    });
+}
