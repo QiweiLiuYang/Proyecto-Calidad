@@ -21,3 +21,10 @@
     background-color: #870012 !important;
 }
 
+.border-dashed{
+    border-style: dashed !important;
+}
+
+label{
+    cursor: pointer;
+}
