@@ -1,5 +1,6 @@
 <?php
     header('Content-Type: application/json');
+    include_once 'dropdownContent.php';
     
     $duracionCookie = 0;
     if(isset($_POST['recordar']) && $_POST['recordar'] == "si"){
@@ -25,7 +26,8 @@
         session_regenerate_id(true);
         $_SESSION['loggedin'] = true;
         $_SESSION['ua'] = $_SERVER['HTTP_USER_AGENT'];
-        echo json_encode(['success'=> $_SESSION['loggedin']]);
+
+        echo json_encode(['success'=> $_SESSION['loggedin'], 'html' => $html]);
     } else {
         http_response_code(401);
     }
