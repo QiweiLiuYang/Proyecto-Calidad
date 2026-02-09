@@ -2,8 +2,8 @@
     $html = '
         <div class="container-sm mt-5">
             <div class="row justify-content-center">
-                <div class="col-3"></div>
-                <div class="col-6 justify-content-center text-center">
+                <div class="col-2"></div>
+                <div class="col-8 justify-content-center text-center">
                     <h2>Estudiantes</h2>
                     <div class="d-flex align-items-center">
                         <div class="p-5 border rounded-5 border-2 border-bg-pure-black mt-4 w-100">
@@ -27,9 +27,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-3"></div>
-                <div class="col-3"></div>
-                <div class="col-6 justify-content-center text-center mt-5">
+                <div class="col-2"></div>
+                <div class="col-2"></div>
+                <div class="col-8 justify-content-center text-center mt-5">
                     <h2>Profesores</h2>
                     <div class="d-flex align-items-center">
                         <div class="p-5 border rounded-5 border-2 border-bg-pure-black mt-4 w-100">
@@ -54,12 +54,12 @@
                     </div>
                     
                 </div>
-                <div class="col-3"></div>
-                <div class="col-3"></div>
-                <div id="divGenerarActa" class="col-6 text-center mt-5 d-none">
-                    <button type="button" id="generarActa" class="btn btn-red border rounded-3 text-white pt-2 px-5">Generar Acta</button>
+                <div class="col-2"></div>
+                <div class="col-2"></div>
+                <div id="divGenerarActa" class="col-8 text-center mt-5 d-none">
+                    <button type="button" id="generarActa" class="btn btn-red border rounded-3 text-white py-2 px-5">Generar Acta</button>
                 </div>
-                <div class="col-3"></div>
+                <div class="col-2"></div>
             </div>
         </div>
     ';
