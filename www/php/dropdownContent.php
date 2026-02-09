@@ -16,7 +16,7 @@
                                         <img src="../img/icono-subir-archivo.jpg" alt="Icono subir archivo" width="100px" height="auto">
                                     </div>
                                 </label>
-                                <div id="mensajesDropdown1" class="mt-2"></div>
+                                <div id="mensajesDropdown1" class="my-2"></div>
                                 <input type="file" id="inputFicheroAlumnos" class="d-none" name="ficheroAlumnos" accept=".xml">
                             </div>
                         </div>
@@ -42,7 +42,7 @@
                                         <img src="../img/icono-subir-archivo.jpg" alt="Icono subir archivo" width="100px" height="auto">
                                     </div>
                                 </label>
-                                <div id="mensajesDropdown2" class="mt-2"></div>
+                                <div id="mensajesDropdown2" class="my-2"></div>
                                 <input type="file" id="inputFicheroProfesores" class="d-none" name="ficheroProfesores" accept=".xlsx">
                             </div>
                         </div>
