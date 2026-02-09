@@ -6,7 +6,7 @@
                 <div class="col-6 justify-content-center text-center">
                     <h2>Estudiantes</h2>
                     <div class="d-flex align-items-center">
-                        <div class="p-5 border rounded-5 border-2 border-bg-pure-black mt-4">
+                        <div class="p-5 border rounded-5 border-2 border-bg-pure-black mt-4 w-100">
                             <div id="contenedorDropdown1" class="p-2 border border-3 border-dashed">
                                 <label id="labelDropdown1" class="row align-items-center" for="inputFicheroAlumnos">
                                     <div class="col-6">
@@ -32,26 +32,24 @@
                 <div class="col-6 justify-content-center text-center mt-5">
                     <h2>Profesores</h2>
                     <div class="d-flex align-items-center">
-                        <div class="d-flex align-items-center">
-                            <div class="p-5 border rounded-5 border-2 border-bg-pure-black mt-4">
-                                <div id="contenedorDropdown2" class="p-2 border border-3 border-dashed">
-                                    <label id="labelDropdown2" class="row align-items-center" for="inputFicheroProfesores">
-                                        <div class="col-6">
-                                            <span>Puede arrastrar y soltar aquí el archivo para añadirlo</span>
-                                        </div>
-                                        <div class="col-6 ps-5">
-                                            <img src="../img/icono-subir-archivo.jpg" alt="Icono subir archivo" width="100px" height="auto">
-                                        </div>
-                                    </label>
-                                    <div id="mensajesDropdown2" class="mt-2"></div>
-                                    <input type="file" id="inputFicheroProfesores" class="d-none" name="ficheroProfesores" accept=".xlsx">
-                                </div>
+                        <div class="p-5 border rounded-5 border-2 border-bg-pure-black mt-4 w-100">
+                            <div id="contenedorDropdown2" class="p-2 border border-3 border-dashed">
+                                <label id="labelDropdown2" class="row align-items-center" for="inputFicheroProfesores">
+                                    <div class="col-6">
+                                        <span>Puede arrastrar y soltar aquí el archivo para añadirlo</span>
+                                    </div>
+                                    <div class="col-6 ps-5">
+                                        <img src="../img/icono-subir-archivo.jpg" alt="Icono subir archivo" width="100px" height="auto">
+                                    </div>
+                                </label>
+                                <div id="mensajesDropdown2" class="mt-2"></div>
+                                <input type="file" id="inputFicheroProfesores" class="d-none" name="ficheroProfesores" accept=".xlsx">
                             </div>
-                            <div id="divBorrarProfesores" class="d-none">
-                                <button type="button" id="borrarProfesores" class="btn ms-4 bg-transparent border rounded-3 border-bg-pure-black">
-                                    <img src="../img/papelera.png" alt="Icono papelera" width="40px" height="auto">
-                                </button>
-                            </div>
+                        </div>
+                        <div id="divBorrarProfesores" class="d-none">
+                            <button type="button" id="borrarProfesores" class="btn ms-4 bg-transparent border rounded-3 border-bg-pure-black">
+                                <img src="../img/papelera.png" alt="Icono papelera" width="40px" height="auto">
+                            </button>
                         </div>
                     </div>
                     
