@@ -1,5 +1,8 @@
 <?php
+    header('Content-Type: application/json');
     session_start();
+
+    
 
     if(!isset($_SESSION['loggedin']) || $_SESSION['ua'] !== $_SERVER['HTTP_USER_AGENT']){
         session_unset();
