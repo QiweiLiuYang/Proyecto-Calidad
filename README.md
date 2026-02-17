@@ -25,5 +25,12 @@ datos de ambos ficheros.
 #### Backend
 * PHP
 
+### Instalar dependencias
+Situarse en la carpeta www/php y ejecutar composer install.
+Se requiere tener habilitado las extensiones de php.ini:
+* zip
+* gd
+* fileinfo
+
 ## Licencia
 Este proyecto está bajo la licencia APACHE 2.0 [Ver la licencia](LICENSE)
