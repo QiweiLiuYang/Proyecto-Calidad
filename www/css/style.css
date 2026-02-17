@@ -1,3 +1,5 @@
+
+
 .border-bg-pure-black{
     border-color: #000000 !important;
 }
@@ -28,6 +30,8 @@
 label{
     cursor: pointer;
 }
+
+/* By: Victoria */
 
 .footer {
     background-color: white;
@@ -176,4 +180,146 @@ label{
     background-color: #006399;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0,119,181,0.3);
+}
+
+/* Footer sticky */
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
+}
+
+/* Tablets */
+@media (max-width: 768px) {
+    .navbar-brand {
+        text-align: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+
+    .navbar-brand .col-sm-12 {
+        text-align: center;
+    }
+
+    #divLogin, #divBienvenida {
+        justify-content: center;
+        margin: 1rem auto;
+    }
+
+    .footer {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer-left {
+        margin-bottom: 15px;
+    }
+
+    .footer-right {
+        text-align: center;
+    }
+}
+
+/* Móviles */
+@media (max-width: 576px) {
+    .navbar-brand img {
+        width: 80px !important;
+    }
+
+    .navbar-brand h1 {
+        font-size: 1.5rem;
+    }
+
+    .navbar-brand small {
+        font-size: 0.7rem;
+    }
+
+    #botonLogin {
+        font-size: 1.2rem !important;
+        padding: 0.5rem 2rem !important;
+    }
+
+    #divBienvenida h3 {
+        font-size: 1rem;
+    }
+
+    .modal-dialog {
+        margin: 0.5rem;
+    }
+
+    .modal-body input {
+        width: 100% !important;
+        margin-top: 0.5rem;
+    }
+
+    .modal-body .col-3 {
+        width: 100% !important;
+        text-align: left !important;
+        padding-left: 0 !important;
+    }
+
+    .modal-body .col-6 {
+        width: 100% !important;
+    }
+
+    .modal-footer {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .modal-footer button {
+        width: 100%;
+    }
+
+    .modal-content {
+        padding: 20px;
+        margin: 5% auto;
+    }
+
+    .social-links {
+        padding: 0 10px;
+    }
+
+    .social-link {
+        padding: 15px 20px;
+        font-size: 16px;
+    }
+
+    .social-link i {
+        font-size: 24px;
+    }
+}
+
+/* Móviles pequeños */
+@media (max-width: 380px) {
+    .navbar-brand img {
+        width: 60px !important;
+    }
+
+    .navbar-brand h1 {
+        font-size: 1.2rem;
+    }
+
+    #botonLogin {
+        font-size: 1rem !important;
+        padding: 0.4rem 1.5rem !important;
+    }
+
+    .modal-author-name {
+        font-size: 22px;
+    }
+
+    .social-link {
+        font-size: 14px;
+        padding: 12px 15px;
+    }
 }
