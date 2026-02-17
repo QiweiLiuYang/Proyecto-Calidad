@@ -6,6 +6,7 @@
     <title>Proyecto-Calidad</title>
     <link rel="stylesheet" href="../css/bootstrap.css">
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="../js/bootstrap.bundle.js"></script>
     <script type="module" src="../js/main.js" defer></script>
 </head>
@@ -66,8 +67,79 @@
     <main>
         
     </main>
-    <footer>
-
+   <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-left">
+            <p>© All rights reserved.</p>
+        </div>
+        <div class="footer-right">
+            <p class="footer-title">Hecho por:</p>
+            <p class="author-name" data-name="Victoria Farinós" data-github="https://github.com/VictoriaEdu67" data-linkedin="https://linkedin.com/in/qiwei-liu-dev">Victoria Farinós</p> <!-- Cambiar linkedin al de victoria -->
+            <p class="author-name" data-name="Qiwei Liuyang" data-github="https://github.com/kevliudev" data-linkedin="https://linkedin.com/in/qiwei-liu-dev">Qiwei Liuyang</p>
+            <p class="author-name" data-name="Mathew" data-github="" data-linkedin="">mathew</p>
+        </div>
     </footer>
+
+    <!-- Modal for socialmedia /Work -->
+    <div id="socialModal" class="modal">
+        <div class="modal-content">
+            <span class="close-social">&times;</span>
+            <h2 id="authorName" class="modal-author-name"></h2>
+            
+            <div class="social-links">
+                <a id="githubLink" href="#" target="_blank" class="social-link github-link">
+                    <i class="fab fa-github"></i>
+                    <span>GitHub</span>
+                </a>
+                
+                <a id="linkedinLink" href="#" target="_blank" class="social-link linkedin-link">
+                    <i class="fab fa-linkedin"></i>
+                    <span>LinkedIn</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM
+        const socialModal = document.getElementById('socialModal');
+        const closeSocial = document.querySelector('.close-social');
+        const authorNames = document.querySelectorAll('.author-name');
+
+        // Close modal
+        closeSocial.addEventListener('click', () => {
+            socialModal.style.display = 'none';
+        });
+
+        // Open modal
+        authorNames.forEach(author => {
+            author.addEventListener('click', function() {
+                const name = this.getAttribute('data-name');
+                const github = this.getAttribute('data-github');
+                const linkedin = this.getAttribute('data-linkedin');
+                
+                // Update modal
+                document.getElementById('authorName').textContent = name;
+                document.getElementById('githubLink').href = github;
+                document.getElementById('linkedinLink').href = linkedin;
+                
+                socialModal.style.display = 'block';
+            });
+        });
+
+        // Close modal 
+        window.addEventListener('click', (event) => {
+            if (event.target === socialModal) {
+                socialModal.style.display = 'none';
+            }
+        });
+
+        // Close modal with ESC
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && socialModal.style.display === 'block') {
+                socialModal.style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>
