@@ -60,12 +60,39 @@
                         </div>
                     </div>
                 </div>
-                </div>
+            </div>
         </nav>
     </header>
     <main>
         
     </main>
+    <section>
+        <div class="modal fade" id="modalGrupos" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content border border-red">
+                    <div class="modal-header border-red">
+                        <h4 class="modal-title">Grupos encontrados</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h5>Selecciona que grupo quieres generar la acta:</h5>
+                        <form id="formularioGrupos" class="mt-4">
+                            <div class="mb-3 row align-items-center">
+                                <label for="grupos" class="pe-3 col-3 col-form-label">Grupo:</label>
+                                <select class="col-6" id="grupos" name="grupos" required>
+                                    <option value="-1" selected>Selecciona un grupo...</option>
+                                </select>
+                            </div>
+                            <div class="modal-footer border-red">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="submit" id="submitGrupos" class="btn btn-red border-red">Generar acta</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
     <footer>
 
     </footer>

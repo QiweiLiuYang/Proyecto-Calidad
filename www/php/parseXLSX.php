@@ -1,12 +1,15 @@
 <?php
+    header('Content-Type: application/json');
     // Carga las librerías necesarias
     require 'vendor/autoload.php';
     use PhpOffice\PhpSpreadsheet\IOFactory;
 
+    $profesores = $_FILES['profesores']['tmp_name'] ?? null;
+
     // Nombre de la hoja XLSX
     $xlsx = '25-26 RELACIÓ - Plantilla IES ABASTOS.xlsx';
     // Cargar el fichero con la librería
-    $doc = IOFactory::load($xlsx);
+    $doc = IOFactory::load($profesores);
     // Obtener la hoja/ventana número 0
     $hoja0 = $doc->getSheet(0);
     // Obtener la hoja/ventana número 1
@@ -161,4 +164,6 @@
     }
 
     // print_r($datos1);
+
+    echo json_encode($datos1, JSON_PRETTY_PRINT);
 ?>

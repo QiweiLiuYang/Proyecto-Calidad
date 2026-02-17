@@ -8,8 +8,13 @@
     // ocurre un error, que no se nos corrompa el original. Al acabar, se eliminará la plantilla copia.
     // Tendra como nombre, la fecha actual
     $plantillaOriginal = "plantilla.xlsx";
-    $plantillaCopia = "temp/report_" . (new DateTime())->format("d-m-Y_H-i-s-v") . ".xlsx";
+    $plantillaCopia = "actas/" . (new DateTime())->format("Y-m-d_H-i-s-v") . "_acta.xlsx";
     copy($plantillaOriginal, $plantillaCopia);
+
+    // Grupo de la cual vamos a rellenar
+    $grupoForm = $_POST['grupo'] ?? null;
+
+    if(!$grupoForm || $grupoForm < 0) die("Error: No se ha recibido un grupo válido");
 
     // Cargar plantilla en memoria 
     $doc = IOFactory::load($plantillaCopia);
@@ -43,15 +48,18 @@
         $grupo = [];
 
         // Curso al que va (primero o segundo)
-        $curso = $datos1[$tutor]['grup'][0]/2 == 0 ? "1" : "2";
+        $curso = $datos1[$tutor]['grup'][0]%2 == 0 ? "2" : "1";
 
         // Formateado del nombre del curso para buscarlo en el fichero de alumnos
-        $nombreGrupo = strtoupper(trim(substr($datos1[39]['grup'], 1)));
+        $nombreGrupo = strtoupper(trim(substr($datos1[$tutor]['grup'], 1)));
         
         // Bucle que recorre la lista de alumnos
         foreach($ficheroAlumnos->alumnos->alumno as $alu){
+            // Parseamos a string para asegurar la compatibilidad de tipos
+            $grupoXml = (string)$alu['grupo'];
+
             // If para ver si está en primero o segundo y en que grupo
-            if(str_contains($alu['grupo'], $curso) && str_contains((string)$alu['grupo'], $nombreGrupo)){
+            if(str_contains($grupoXml, $curso) && str_contains($grupoXml, $nombreGrupo)){
                 $grupo[] = [
                     "NIA" => (string)$alu['NIA'],
                     "apellido1" => (string)$alu['apellido1'],
@@ -102,8 +110,8 @@
     }
 
     // Llamada a las funciones
-    rellenarHoja0($doc, $datos0, $datos1, 39);
-    rellenarHoja2($doc, $ficheroAlumnos, $datos1, 39);
+    rellenarHoja0($doc, $datos0, $datos1, $grupoForm);
+    rellenarHoja2($doc, $ficheroAlumnos, $datos1, $grupoForm);
 
     $guardar = IOFactory::createWriter($doc, "Xlsx");
     try {
@@ -111,6 +119,6 @@
         
     } catch (Exception $e) {
         echo "Error al guardar: " . $e->getMessage();
-        unlink($plantillaCopia);
+        if(file_exists($plantillaCopia)) unlink($plantillaCopia);
     }
 ?>

@@ -78,9 +78,59 @@ function configurarContenedores(){
     });
 
     const btnGenerar = document.getElementById('generarActa');
+    const grupos = document.getElementById("grupos");
+    let archivoFetch = ""
     if(btnGenerar){
         btnGenerar.addEventListener('click', () => {
-            console.log("WIP: Working In Progress");
+            const formData = new FormData();
+
+            const profesores = document.getElementById("inputFicheroProfesores").files[0];
+            archivoFetch = profesores;
+
+            if(profesores){
+                formData.append('profesores', profesores);
+
+                fetch("../php/parseXLSX.php", {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(res => {
+                    if(!res.ok) throw new Error("Error a la hora de leer los ficheros");
+                    return res.json();
+                })
+                .then(data => {
+                    const modalGrupos = new bootstrap.Modal(document.getElementById('modalGrupos'));
+                    modalGrupos.show();
+
+                    for(let [indice, grupo] of data.entries()){
+                        let opcion = document.createElement("option");
+                        opcion.innerText = `Grupo: ${grupo.grup} - Tutor: ${grupo.tutor}`; 
+                        opcion.setAttribute("value", indice);
+                        grupos.appendChild(opcion);
+                    }
+                    console.log(data);
+                })
+                .catch(err => alert(err));
+            }else alert("No has subido fichero o no son válidos");  
         })
     }
+
+    const submitGrupos = document.getElementById("submitGrupos");
+    submitGrupos.addEventListener("click", (e) => {
+        e.preventDefault();
+        if(grupos.value !== -1){
+            const formData = new FormData();
+            formData.append('grupo', grupos.value);
+            formData.append('profesores', archivoFetch);
+            fetch("../php/fillTEMPLATE.php", {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => {
+                
+            })
+            .catch(err => alert(err));
+        }
+        console.log(grupos.value);
+    });
 }
