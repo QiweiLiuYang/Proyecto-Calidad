@@ -1,10 +1,12 @@
 import { verificarSesion, iniciarLogin } from "./autenticacion.js";
 import { iniciarSubirFicheros } from "./subirFicheros.js";
+import { cargarActas } from "./actas.js";
 
 const divLogin = document.getElementById("divLogin");
 const divBienvenida = document.getElementById("divBienvenida");
 const main = document.querySelector("main");
 const modalLogin = document.getElementById('modalLogin');
+const modalGrupos = document.getElementById("modalGrupos");
 const formularioLogin = document.getElementById('formularioLogin');
 
 window.onload = function() {
@@ -99,8 +101,7 @@ function configurarContenedores(){
                     return res.json();
                 })
                 .then(data => {
-                    const modalGrupos = new bootstrap.Modal(document.getElementById('modalGrupos'));
-                    modalGrupos.show();
+                    bootstrap.Modal.getOrCreateInstance(modalGrupos).show();
 
                     for(let [indice, grupo] of data.entries()){
                         let opcion = document.createElement("option");
@@ -108,7 +109,6 @@ function configurarContenedores(){
                         opcion.setAttribute("value", indice);
                         grupos.appendChild(opcion);
                     }
-                    console.log(data);
                 })
                 .catch(err => alert(err));
             }else alert("No has subido fichero o no son válidos");  
@@ -118,19 +118,22 @@ function configurarContenedores(){
     const submitGrupos = document.getElementById("submitGrupos");
     submitGrupos.addEventListener("click", (e) => {
         e.preventDefault();
-        if(grupos.value !== -1){
+        let opcion = Number(grupos.value);
+        if(opcion !== -1){
             const formData = new FormData();
-            formData.append('grupo', grupos.value);
+            formData.append('grupo', opcion);
             formData.append('profesores', archivoFetch);
             fetch("../php/fillTEMPLATE.php", {
                 method: 'POST',
                 body: formData
             })
             .then(res => {
-                
+                const contenedorActas = document.getElementById("contenedorActas");
+                bootstrap.Modal.getInstance(modalGrupos).hide();
+                contenedorActas.classList.remove("d-none");
+                cargarActas();
             })
             .catch(err => alert(err));
         }
-        console.log(grupos.value);
     });
 }
