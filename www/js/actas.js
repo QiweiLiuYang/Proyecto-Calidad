@@ -5,7 +5,6 @@ export function cargarActas(){
         return res.json();
     })
     .then(data => {
-        console.log(data);
         const divActas = document.getElementById("divActas");
         divActas.innerHTML = "";
 
@@ -23,11 +22,25 @@ export function cargarActas(){
                     </a>
                 </div>
                 <div>
-                    <button type="button" class="btn bg-transparent border rounded-3 border-bg-pure-black">
+                    <button type="button" class="btn bg-transparent border rounded-3 border-bg-pure-black" data-ruta="${uri.substring(13)}">
                         <img src="../img/papelera.png" alt="Icono de descarga" width="50px" height="auto">
                     </button>
                 </div>
             `;
+
+            const botonBorrar = div.querySelector("button");
+            botonBorrar.addEventListener("click", (e) => {
+                const formData = new FormData();
+                formData.append("acta", e.currentTarget.getAttribute("data-ruta"));
+
+                fetch("../php/borrarActas.php", {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(res => {if(res.ok) cargarActas()})
+                .catch(err => console.error(err));
+            });
+
             divActas.appendChild(div);
         }
     })

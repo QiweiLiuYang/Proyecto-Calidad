@@ -4,17 +4,17 @@
     require_once "parseXML.php";
     use PhpOffice\PhpSpreadsheet\IOFactory;
 
-    // Hacer copia de la plantilla original para trabajar sobre ella, por si a mitad de proceso
-    // ocurre un error, que no se nos corrompa el original. Al acabar, se eliminará la plantilla copia.
-    // Tendra como nombre, la fecha actual
-    $plantillaOriginal = "plantilla.xlsx";
-    $plantillaCopia = "actas/" . (new DateTime())->format("Y-m-d_H-i-s-v") . "_acta.xlsx";
-    copy($plantillaOriginal, $plantillaCopia);
-
     // Grupo de la cual vamos a rellenar
     $grupoForm = $_POST['grupo'] ?? null;
 
     if(!$grupoForm || $grupoForm < 0) die("Error: No se ha recibido un grupo válido");
+
+    // Hacer copia de la plantilla original para trabajar sobre ella, por si a mitad de proceso
+    // ocurre un error, que no se nos corrompa el original. Al acabar, se eliminará la plantilla copia.
+    // Tendra como nombre, la fecha actual
+    $plantillaOriginal = "plantilla.xlsx";
+    $plantillaCopia = "actas/" . (new DateTime())->format("Y-m-d_H-i-s-v") . "_acta_" . $datos1[$grupoForm]['grup'] . ".xlsx";
+    copy($plantillaOriginal, $plantillaCopia);
 
     // Cargar plantilla en memoria 
     $doc = IOFactory::load($plantillaCopia);
@@ -48,7 +48,7 @@
         $grupo = [];
 
         // Curso al que va (primero o segundo)
-        $curso = $datos1[$tutor]['grup'][0]%2 == 0 ? "2" : "1";
+        $curso = $datos1[$tutor]['grup'][0]%2 == 0 ? "1" : "2";
 
         // Formateado del nombre del curso para buscarlo en el fichero de alumnos
         $nombreGrupo = strtoupper(trim(substr($datos1[$tutor]['grup'], 1)));

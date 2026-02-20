@@ -33,6 +33,10 @@ function cargarAplicacion(html){
     divBienvenida.style.display = "block";
     main.innerHTML = html;
     configurarContenedores();
+
+    const contenedorActas = document.getElementById("contenedorActas");
+    contenedorActas.classList.remove("d-none");
+    cargarActas();
 }
 
 function configurarLogin(){
@@ -136,6 +140,7 @@ function configurarContenedores(){
         e.preventDefault();
         let opcion = Number(grupos.value);
         if(opcion !== -1){
+            console.log(opcion);
             const formData = new FormData();
             formData.append('grupo', opcion);
             formData.append('profesores', archivoFetchExcel);
@@ -146,6 +151,12 @@ function configurarContenedores(){
             })
             .then(res => {
                 const contenedorActas = document.getElementById("contenedorActas");
+                const borrarEstudiantes = document.getElementById("borrarEstudiantes");
+                const borrarProfesores = document.getElementById("borrarProfesores");
+
+                borrarEstudiantes.click();
+                borrarProfesores.click();
+
                 bootstrap.Modal.getInstance(modalGrupos).hide();
                 contenedorActas.classList.remove("d-none");
                 cargarActas();
