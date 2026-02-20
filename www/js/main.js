@@ -81,15 +81,21 @@ function configurarContenedores(){
 
     const btnGenerar = document.getElementById('generarActa');
     const grupos = document.getElementById("grupos");
-    let archivoFetch = ""
+    let archivoFetchExcel = "";
+    let archivoFetchXML = "";
+
     if(btnGenerar){
-        btnGenerar.addEventListener('click', () => {
+        btnGenerar.addEventListener('click', (e) => {
+            e.target.disabled = true;
+
             const formData = new FormData();
 
+            const alumnos = document.getElementById("inputFicheroAlumnos").files[0];
             const profesores = document.getElementById("inputFicheroProfesores").files[0];
-            archivoFetch = profesores;
+            archivoFetchXML = alumnos;
+            archivoFetchExcel = profesores;
 
-            if(profesores){
+            if(alumnos && profesores){
                 formData.append('profesores', profesores);
 
                 fetch("../php/parseXLSX.php", {
@@ -103,6 +109,10 @@ function configurarContenedores(){
                 .then(data => {
                     bootstrap.Modal.getOrCreateInstance(modalGrupos).show();
 
+                    e.target.disabled = false;
+
+                    grupos.innerHTML = '<option value="-1" selected>Selecciona un grupo...</option>';
+
                     for(let [indice, grupo] of data.entries()){
                         let opcion = document.createElement("option");
                         opcion.innerText = `Grupo: ${grupo.grup} - Tutor: ${grupo.tutor}`; 
@@ -110,8 +120,14 @@ function configurarContenedores(){
                         grupos.appendChild(opcion);
                     }
                 })
-                .catch(err => alert(err));
-            }else alert("No has subido fichero o no son válidos");  
+                .catch(err => {
+                    alert(err);
+                    e.target.disabled = false;
+                });
+            }else {
+                alert("No has subido fichero o no son válidos")
+                e.target.disabled = false;
+            }
         })
     }
 
@@ -122,7 +138,8 @@ function configurarContenedores(){
         if(opcion !== -1){
             const formData = new FormData();
             formData.append('grupo', opcion);
-            formData.append('profesores', archivoFetch);
+            formData.append('profesores', archivoFetchExcel);
+            formData.append('alumnos', archivoFetchXML);
             fetch("../php/fillTEMPLATE.php", {
                 method: 'POST',
                 body: formData

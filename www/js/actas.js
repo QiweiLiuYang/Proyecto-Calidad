@@ -7,12 +7,14 @@ export function cargarActas(){
     .then(data => {
         console.log(data);
         const divActas = document.getElementById("divActas");
+        divActas.innerHTML = "";
+
         for(let uri of data){
             const div = document.createElement("div");
             div.classList.add("d-flex", "justify-content-evenly", "align-items-center", "border-bottom", "pb-2");
             div.innerHTML = `
                 <div class="d-flex flex-column align-items-center">
-                    <img src="../img/xlsx.png" alt="Icono de excel" width="75px" heigth="auto">
+                    <img src="../img/xlsx.png" alt="Icono de excel" width="75px" height="auto">
                     <span>${uri.substring(13)}</span>
                 </div>
                 <div>

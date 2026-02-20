@@ -25,75 +25,74 @@
             <div id="divLogin" class="nav col-sm-12 col-md-auto me-5">
                 <button id="botonLogin" type="button" class="btn btn-login border-2 px-5 py-2 fs-3" data-bs-toggle="modal" data-bs-target="#modalLogin">Inicio sesión</button>
             </div>
-            <div id="divBienvenida" class="nav col-sm12 col-md-auto me-5" style="display: none;">
+            <div id="divBienvenida" class="nav col-sm-12 col-md-auto me-5" style="display: none;">
                 <h3>Bienvenido equipo administrativo</h3>
-            </div>
-            <div class="modal fade" id="modalLogin" tabindex="-1">
-                <div class="modal-dialog">
-                    <div class="modal-content border border-red">
-                        <div class="modal-header border-red">
-                            <h4 class="modal-title">Iniciar sesión</h4>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-                        <div class="modal-body">
-                            <h5>Introduce tus credenciales para acceder.</h5>
-                            <p id="mensajeErrorLogin" style="display: none;">Inicio de sesión fallido, intentalo de nuevo</p>
-                            <form id="formularioLogin" class="mt-4"> <!--action="../php/login.php" method="POST"-->
-                                <div class="mb-3 row align-items-center">
-                                    <label for="usuario" class="pe-3 col-3 col-form-label">Usuario:</label>
-                                    <input class="col-6" id="usuario" type="text" name="usuario" value="" required>
-                                </div>
-                                <div class="mb-3 row align-items-center">
-                                    <label for="contrasena" class="pe-3 col-3 col-form-label">Contraseña:</label>
-                                    <input class="col-6" id="contrasena" type="password" name="contrasena" value="" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label>
-                                        <input type="checkbox" name="recordar" value="si">
-                                        Mantener mi sesión abierta durante 10 horas
-                                    </label>
-                                </div>
-                                <div class="modal-footer border-red">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                    <button type="submit" id="botonSubmit" class="btn btn-red border-red">Entrar</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
             </div>
         </nav>
     </header>
     <main>
         
     </main>
-    <section>
-        <div class="modal fade" id="modalGrupos" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content border border-red">
-                    <div class="modal-header border-red">
-                        <h4 class="modal-title">Grupos encontrados</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <h5>Selecciona que grupo quieres generar la acta:</h5>
-                        <form id="formularioGrupos" class="mt-4">
-                            <div class="mb-3 row align-items-center">
-                                <label for="grupos" class="pe-3 col-3 col-form-label">Grupo:</label>
-                                <select class="col-6" id="grupos" name="grupos" required>
-                                    <option value="-1" selected>Selecciona un grupo...</option>
-                                </select>
-                            </div>
-                            <div class="modal-footer border-red">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                                <button type="submit" id="submitGrupos" class="btn btn-red border-red">Generar acta</button>
-                            </div>
-                        </form>
-                    </div>
+    <div class="modal fade" id="modalLogin" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content border border-red">
+                <div class="modal-header border-red">
+                    <h4 class="modal-title">Iniciar sesión</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <h5>Introduce tus credenciales para acceder.</h5>
+                    <p id="mensajeErrorLogin" style="display: none;">Inicio de sesión fallido, intentalo de nuevo</p>
+                    <form id="formularioLogin" class="mt-4"> <!--action="../php/login.php" method="POST"-->
+                        <div class="mb-3 row align-items-center">
+                            <label for="usuario" class="pe-3 col-3 col-form-label">Usuario:</label>
+                            <input class="col-6" id="usuario" type="text" name="usuario" value="" required>
+                        </div>
+                        <div class="mb-3 row align-items-center">
+                            <label for="contrasena" class="pe-3 col-3 col-form-label">Contraseña:</label>
+                            <input class="col-6" id="contrasena" type="password" name="contrasena" value="" required>
+                        </div>
+                        <div class="mb-3">
+                            <label>
+                                <input type="checkbox" name="recordar" value="si">
+                                Mantener mi sesión abierta durante 10 horas
+                            </label>
+                        </div>
+                        <div class="modal-footer border-red">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" id="botonSubmit" class="btn btn-red border-red">Entrar</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+
+    <div class="modal fade" id="modalGrupos" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content border border-red">
+                <div class="modal-header border-red">
+                    <h4 class="modal-title">Grupos encontrados</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <h5>Selecciona que grupo quieres generar la acta:</h5>
+                    <form id="formularioGrupos" class="mt-4">
+                        <div class="mb-3 row align-items-center">
+                            <label for="grupos" class="pe-3 col-3 col-form-label">Grupo:</label>
+                            <select class="col-6" id="grupos" name="grupos" required>
+                                <option value="-1" selected>Selecciona un grupo...</option>
+                            </select>
+                        </div>
+                        <div class="modal-footer border-red">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" id="submitGrupos" class="btn btn-red border-red">Generar acta</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
    <!-- Footer -->
     <footer class="footer">
@@ -109,7 +108,7 @@
     </footer>
 
     <!-- Modal for socialmedia /Work -->
-    <div id="socialModal" class="modal">
+    <div id="socialModal" class="modal-redes">
         <div class="modal-content">
             <span class="close-social">&times;</span>
             <h2 id="authorName" class="modal-author-name"></h2>
