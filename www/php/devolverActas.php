@@ -5,7 +5,7 @@
     $entrada = readdir($dirActas);
     $ficheros = [];
     while($entrada !== false){
-        if(str_ends_with($entrada, ".xlsx")){
+        if(str_ends_with($entrada, ".xlsx") || str_ends_with($entrada, ".zip")){
             $ficheros[] = $entrada;
         }
         $entrada = readdir($dirActas);

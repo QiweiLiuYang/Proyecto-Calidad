@@ -6,31 +6,35 @@
 
     // Grupo de la cual vamos a rellenar
     $grupoForm = $_POST['grupo'] ?? null;
+    if($grupoForm === null || !isset($datos1[$grupoForm])) die("Error: No se ha recibido un grupo válido");
 
-    if(!$grupoForm || $grupoForm < 0) die("Error: No se ha recibido un grupo válido");
+    $acta = "plantilla.xlsx";
+    $index = "plantilla_Index.xlsx";
 
-    // Hacer copia de la plantilla original para trabajar sobre ella, por si a mitad de proceso
-    // ocurre un error, que no se nos corrompa el original. Al acabar, se eliminará la plantilla copia.
-    // Tendra como nombre, la fecha actual
-    $plantillaOriginal = "plantilla.xlsx";
-    $plantillaCopia = "actas/" . (new DateTime())->format("Y-m-d_H-i-s-v") . "_acta_" . $datos1[$grupoForm]['grup'] . ".xlsx";
-    copy($plantillaOriginal, $plantillaCopia);
+    // Cargar las plantillas en memoria 
+    $docIndex = IOFactory::load($index);
+    $docActa = IOFactory::load($acta);
 
-    // Cargar plantilla en memoria 
-    $doc = IOFactory::load($plantillaCopia);
-
-    // Rellenado de las celdas de la hoja 0
-    function rellenarHoja0($doc, $datos0, $datos1, $tutor){
+    // Rellenado de la hoja de índice de las actas
+    function rellenarActaIndex($docIndex, $docActa, $datos0, $datos1, $tutor){
         // Abrir la primera pestaña del Excel
-        $hoja0 = $doc->getSheet(0);
+        $hoja0 = $docIndex->getSheet(0);
+        
+        $fichaAlum = $docActa->getSheet(11);
+
+        // Obtener el curso actual
+        $curso = (date('n') >= 9) ? date('Y') . "-" . (date('Y') + 1) : (date('Y') - 1) . "-" . date('Y');
 
         $hoja0->setCellValue("G3", $datos1[$tutor]['grup']);
         $hoja0->setCellValue("G4", $datos1[$tutor]['tutor']);
+        $hoja0->setCellValue("G5", $curso);
+
+        $fichaAlum->setCellValue("K3", $datos1[$tutor]['grup']);
+        $fichaAlum->setCellValue("K4", $datos1[$tutor]['tutor']);
+        $fichaAlum->setCellValue("K5", $curso);
+
         $inicioRellenado = 13;
         foreach($datos0 as $profesor){
-            // print_r($profesor['grup']);
-            // print_r($datos1[39]);
-            //echo $profesor['grup'] . " " . $datos1[39]['grup'] . "   ";
             if(str_contains($profesor['grup'], $datos1[$tutor]['grup'])){
                 $hoja0->setCellValue("B" . $inicioRellenado, $profesor['mdas']);
                 $hoja0->setCellValue("C" . $inicioRellenado, $profesor['prof']);
@@ -40,9 +44,9 @@
     }
     
     // Rellenado de las celdas de la hoja 3
-    function rellenarHoja2($doc, $ficheroAlumnos, $datos1, $tutor){
+    function rellenarFichaAlumActa($docActa, $ficheroAlumnos, $datos1, $tutor){
         // Abrir la tercera pestaña del Excel
-        $hoja2 = $doc->getSheet(2);
+        $fichaAlum = $docActa->getSheet(11);
 
         // Array que contendrá a los alumnos del grupo
         $grupo = [];
@@ -65,7 +69,22 @@
                     "apellido1" => (string)$alu['apellido1'],
                     "apellido2" => (string)$alu['apellido2'],
                     "nombre" => (string)$alu['nombre'],
-                    "nuss" => (int)$alu['nuss'],
+                    "nuss" => (string)$alu['nuss'],
+                    "fechaNac" => (string)$alu['fecha_nac'],
+                    "sexo" => (string)$alu['sexo'],
+                    "documento" => (string)$alu['documento'],
+                    "domicilio" => (string)$alu['domicilio'],
+                    "numero" => (string)$alu['numero'],
+                    "puerta" => (string)$alu['puerta'],
+                    "codPostal" => (string)$alu['cod_postal'],
+                    "tel1" => (string)$alu['telefono1'],
+                    "tel2" => (string)$alu['telefono2'],
+                    "email1" => (string)$alu['email1'],
+                    "email2" => (string)$alu['email2'],
+                    "ensenanza" => (int)$alu['ensenanza'],
+                    "curso" => (int)$alu['curso'],
+                    "grupo" => (string)$alu['grupo'],
+                    "turno" => (string)$alu['turno'],
                     "repite" => (int)$alu['repite']
                 ];
             }
@@ -95,30 +114,64 @@
         // print_r($grupo);
 
         // Desde donde empieza la celda de los alumnos
-        $inicioRellenado = 36;
+        $inicioRellenado = 9;
         
         // Bucle para iniciar el rellenado de cada fila con sus datos
         foreach($grupo as $alu){
-            $nombre = "{$alu['apellido1']} {$alu['apellido2']}, {$alu['nombre']}";
-            $hoja2->setCellValue("B" . $inicioRellenado, $alu['NIA']);
-            $hoja2->setCellValue("C" . $inicioRellenado, $nombre);
-            $hoja2->setCellValue("E" . $inicioRellenado, $alu['nuss'] ?? "no");
-            if((int)$alu['repite'] > 0) $hoja2->setCellValue("J" . $inicioRellenado, "Si");
-            else $hoja2->setCellValue("J" . $inicioRellenado, "No");
+            //$nombre = "{$alu['apellido1']} {$alu['apellido2']}, {$alu['nombre']}";
+            //$fichaAlum->setCellValue("C" . $inicioRellenado, $nombre);
+            $fichaAlum->setCellValue("B" . $inicioRellenado, $alu['NIA']);
+            $fichaAlum->setCellValue("C" . $inicioRellenado, $alu['nombre']);
+            $fichaAlum->setCellValue("D" . $inicioRellenado, $alu['apellido1']);
+            $fichaAlum->setCellValue("E" . $inicioRellenado, $alu['apellido2']);
+            $fichaAlum->setCellValueExplicit("F" . $inicioRellenado, $alu['nuss'] ?? "No", \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+            $fichaAlum->setCellValue("G" . $inicioRellenado, $alu['fechaNac']);
+            $fichaAlum->setCellValue("H" . $inicioRellenado, $alu['sexo']);
+            $fichaAlum->setCellValue("I" . $inicioRellenado, $alu['documento']);
+            $fichaAlum->setCellValue("J" . $inicioRellenado, $alu['domicilio']);
+            $fichaAlum->setCellValue("K" . $inicioRellenado, $alu['numero']);
+            $fichaAlum->setCellValue("L" . $inicioRellenado, $alu['puerta']);
+            $fichaAlum->setCellValue("M" . $inicioRellenado, $alu['codPostal']);
+            $fichaAlum->setCellValue("N" . $inicioRellenado, $alu['tel1']);
+            $fichaAlum->setCellValue("O" . $inicioRellenado, $alu['tel2']);
+            $fichaAlum->setCellValue("P" . $inicioRellenado, $alu['email1']);
+            $fichaAlum->setCellValue("Q" . $inicioRellenado, $alu['email2']);
+            $fichaAlum->setCellValue("R" . $inicioRellenado, $alu['ensenanza']);
+            $fichaAlum->setCellValue("S" . $inicioRellenado, $alu['curso']);
+            $fichaAlum->setCellValue("T" . $inicioRellenado, $alu['grupo']);
+            $fichaAlum->setCellValue("U" . $inicioRellenado, $alu['turno']);
+            if((int)$alu['repite'] > 0) $fichaAlum->setCellValue("V" . $inicioRellenado, "Si");
+            else $fichaAlum->setCellValue("V" . $inicioRellenado, "No");
             $inicioRellenado++;
         }
     }
 
     // Llamada a las funciones
-    rellenarHoja0($doc, $datos0, $datos1, $grupoForm);
-    rellenarHoja2($doc, $ficheroAlumnos, $datos1, $grupoForm);
+    rellenarActaIndex($docIndex, $docActa, $datos0, $datos1, $grupoForm);
+    rellenarFichaAlumActa($docActa, $ficheroAlumnos, $datos1, $grupoForm);
 
-    $guardar = IOFactory::createWriter($doc, "Xlsx");
     try {
-        $guardar->save($plantillaCopia);
-        
+        $guardarIndex = IOFactory::createWriter($docIndex, "Xlsx");
+        $guardarActa = IOFactory::createWriter($docActa, "Xlsx");
+
+        $rutaIndex = "actas/index_acta_" . $datos1[$grupoForm]['grup'] . ".xlsx";
+        $rutaActa = "actas/acta_" . $datos1[$grupoForm]['grup'] . ".xlsx";
+
+        $guardarIndex->save($rutaIndex);
+        $guardarActa->save($rutaActa);
+
+        $zip = new ZipArchive();
+        $rutaZip = "actas/" . (new DateTime())->format("Y-m-d_H-i-s-v") ."_acta.zip";
+
+        if($zip->open($rutaZip, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE){
+            $zip->addFile($rutaIndex, "index.xlsx");
+            $zip->addFile($rutaActa, "acta.xlsx");
+            $zip->close();
+            unlink($rutaIndex);
+            unlink($rutaActa);
+        }
+
     } catch (Exception $e) {
         echo "Error al guardar: " . $e->getMessage();
-        if(file_exists($plantillaCopia)) unlink($plantillaCopia);
     }
 ?>

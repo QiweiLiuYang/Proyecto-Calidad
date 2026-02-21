@@ -1,5 +1,6 @@
 *.xlsx
 *.xml
+*.zip
 
 # Permitir que se suba la plantilla
 !plantilla.xlsx

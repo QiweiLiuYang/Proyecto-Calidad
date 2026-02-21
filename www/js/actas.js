@@ -13,7 +13,7 @@ export function cargarActas(){
             div.classList.add("d-flex", "justify-content-evenly", "align-items-center", "border-bottom", "pb-2");
             div.innerHTML = `
                 <div class="d-flex flex-column align-items-center">
-                    <img src="../img/xlsx.png" alt="Icono de excel" width="75px" height="auto">
+                    <img src="../img/zip.png" alt="Icono de excel" width="75px" height="auto">
                     <span>${uri.substring(13)}</span>
                 </div>
                 <div>
