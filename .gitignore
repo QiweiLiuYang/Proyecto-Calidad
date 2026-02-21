@@ -3,6 +3,7 @@
 
 # Permitir que se suba la plantilla
 !plantilla.xlsx
+!plantilla_Index.xlsx
 
 # Ignorar dependencias de composer
 vendor/
