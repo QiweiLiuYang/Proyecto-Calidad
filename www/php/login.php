@@ -20,7 +20,7 @@
     $contrasena = $_POST['contrasena'] ?? '';
 
     $usuario_valido = 'admin';
-    $contrasena_valida = 'admin';
+    $contrasena_valida = 'Adm1n2026@';
     
     if($usuario === $usuario_valido && $contrasena === $contrasena_valida){
         session_regenerate_id(true);
