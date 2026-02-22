@@ -1,7 +1,8 @@
 <?php
+    ob_start();
     // Include the file containing the HTML structure for the dropdowns
     include_once 'dropdownContent.php';
-
+    ob_clean();
     // Set the response header to JSON format
     header('Content-Type: application/json');
     // Define the session cookie lifetime to 10 hours if remember me is selected, otherwise, until the browser is closed
@@ -40,4 +41,4 @@
         // Return 401 Unauthorized if credentials do not match
         http_response_code(401);
     }
-?>
+    ob_end_flush();

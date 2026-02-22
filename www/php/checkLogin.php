@@ -12,4 +12,3 @@
         include_once 'dropdownContent.php';
         echo json_encode(['html' => $html]);
     }
-?>

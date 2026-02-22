@@ -1,5 +1,5 @@
-<!-- Logic to send the content of "actas" folder content -->
 <?php
+    // Logic to send the content of "actas" folder content
     $acta = $_POST['acta'] ?? null;
 
     if($acta){
@@ -12,4 +12,3 @@
         http_response_code(400);
         die("Error: La acta especificada no existe");
     }
-?>
