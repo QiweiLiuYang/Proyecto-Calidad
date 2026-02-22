@@ -157,5 +157,8 @@
         ];
         $indiceXMatriz++;
     }
-    echo json_encode($datos1);
+    if (basename($_SERVER['SCRIPT_FILENAME']) === 'parseXLSX.php') {
+        header('Content-Type: application/json');
+        echo json_encode($datos1);
+    }
 ?>

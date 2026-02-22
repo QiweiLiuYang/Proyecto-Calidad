@@ -8,11 +8,8 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN locale-gen es_ES.UTF-8
-
 ENV LANG es_ES.UTF-8
-
 ENV LANGUAGE es_ES:es
-
 ENV LC_ALL es_ES.UTF-8
 
 RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
@@ -23,11 +20,9 @@ RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
 RUN a2enmod ssl rewrite headers
 
 COPY apache-config.conf /etc/apache2/sites-available/000-default.conf
-
 COPY --chown=www-data:www-data www/ /var/www/html/
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
 RUN cd /var/www/html/php && composer install --no-dev --optimize-autoloader
 
 RUN mkdir -p /var/www/html/php/actas \
@@ -35,5 +30,4 @@ RUN mkdir -p /var/www/html/php/actas \
     && chmod -R 775 /var/www/html/php/actas
 
 EXPOSE 80 443
-
 CMD ["apachectl", "-D", "FOREGROUND"]

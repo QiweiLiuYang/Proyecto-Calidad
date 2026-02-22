@@ -1,10 +1,10 @@
 <?php
     // Load dependencies via Composer
-    require "vendor/autoload.php";
+    require __DIR__ . "/vendor/autoload.php";
 
     // Include the parsing scripts for XLSX and XML files
-    require_once "parseXLSX.php";
-    require_once "parseXML.php";
+    require_once __DIR__ . "/parseXLSX.php";
+    require_once __DIR__ . "/parseXML.php";
 
     use PhpOffice\PhpSpreadsheet\IOFactory;
 
@@ -112,18 +112,25 @@
 
         // Sort students alphabetically using Spanish language
         $collator = collator_create('es_ES');
-        // Sort the array using apellido1, apellido2 y nombre
-        usort($grupo, function($a, $b) use ($collator){
-            $comparar = collator_compare($collator, $a['apellido1'], $b['apellido1']);
-            if($comparar == 0){
-                $comparar = collator_compare($collator, $a['apellido2'], $b['apellido2']);
-            }
-            if($comparar == 0){
-                $comparar = collator_compare($collator, $a['nombre'], $b['nombre']);
-            }
 
-            return $comparar;
-        });
+        // Sort the array using apellido1, apellido2 y nombre
+        if (!$collator) {
+            usort($grupo, function($a, $b) {
+                return strcmp($a['apellido1'], $b['apellido1']);
+            });
+        } else {
+            usort($grupo, function($a, $b) use ($collator){
+                $comparar = collator_compare($collator, $a['apellido1'], $b['apellido1']);
+                if($comparar == 0){
+                    $comparar = collator_compare($collator, $a['apellido2'], $b['apellido2']);
+                }
+                if($comparar == 0){
+                    $comparar = collator_compare($collator, $a['nombre'], $b['nombre']);
+                }
+
+                return $comparar;
+            });
+        }
 
         // Fill student data starting from row 9
         $inicioRellenado = 9;
@@ -161,7 +168,7 @@
     rellenarFichaAlumActa($docActa, $ficheroAlumnos, $datos1, $grupoForm);
 
     try {
-        $dirActas = __DIR__ . '/actas';
+        $dirActas = __DIR__ . '/actas/';
 
         // Prepare Excel writers
         $guardarIndex = IOFactory::createWriter($docIndex, "Xlsx");
