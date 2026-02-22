@@ -157,4 +157,5 @@
         ];
         $indiceXMatriz++;
     }
+    echo json_encode($datos1);
 ?>
