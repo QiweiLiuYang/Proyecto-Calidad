@@ -1,4 +1,6 @@
-# PHP
+# Iniciar contenido PHP y cargar librerías necesarias
+Situarse en la carpeta php y ejecutar:
+`composer install`
 
 ## Como parsear XLSX a un objeto en PHP
 Utilizando la librería phpoffice/phpspreadsheet con el comando:

@@ -1,13 +1,19 @@
+// Fetches the list of generated ZIP files from the server and renders them dynamically in the interface
 export function cargarActas(){
+    // Request the list of available files from the backend
     fetch("../php/devolverActas.php")
     .then(res => {
+        // Basic error handling for the network request
         if(!res.ok) throw new Error("Error a la hora de recuperar las actas");
         return res.json();
     })
     .then(data => {
         const divActas = document.getElementById("divActas");
+
+        // Clear existing content to prevent duplicates on refresh
         divActas.innerHTML = "";
 
+        // Iterate through each file path (URI) returned by PHP
         for(let uri of data){
             const div = document.createElement("div");
             div.classList.add("d-flex", "justify-content-evenly", "align-items-center", "border-bottom", "pb-2");
@@ -28,6 +34,7 @@ export function cargarActas(){
                 </div>
             `;
 
+            // Setup the delete buttom logic and functionality
             const botonBorrar = div.querySelector("button");
             botonBorrar.addEventListener("click", (e) => {
                 const formData = new FormData();

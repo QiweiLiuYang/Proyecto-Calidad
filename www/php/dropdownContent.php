@@ -1,3 +1,4 @@
+<!-- Html content -->
 <?php
     $html = '
         <div class="container-sm mt-5">
@@ -53,7 +54,7 @@
                 <div id="divGenerarActa" class="col-8 text-center mt-5 d-none">
                     <button type="button" id="generarActa" class="btn btn-red border rounded-3 text-white px-5 py-2">Generar Acta</button>
                 </div>
-                <div id="contenedorActas" class="col-8 justify-content-center text-center mt-5 d-none">
+                <div id="contenedorActas" class="col-8 justify-content-center text-center mt-5">
                     <h2>Actas</h2>
                     <div>
                         <div class="p-5 border rounded-5 border-2 border-bg-pure-black mt-4 w-100">

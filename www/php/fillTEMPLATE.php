@@ -1,30 +1,37 @@
 <?php
+    // Load dependencies via Composer
     require "vendor/autoload.php";
+
+    // Include the parsing scripts for XLSX and XML files
     require_once "parseXLSX.php";
     require_once "parseXML.php";
+
     use PhpOffice\PhpSpreadsheet\IOFactory;
 
-    // Grupo de la cual vamos a rellenar
+    // Get the selected group from the POST request and validate that is a valid group
     $grupoForm = $_POST['grupo'] ?? null;
     if($grupoForm === null || !isset($datos1[$grupoForm])) die("Error: No se ha recibido un grupo válido");
 
+    // Path of the template files
     $acta = "plantilla.xlsx";
     $index = "plantilla_Index.xlsx";
 
-    // Cargar las plantillas en memoria 
+    // Load templates into memory
     $docIndex = IOFactory::load($index);
     $docActa = IOFactory::load($acta);
 
-    // Rellenado de la hoja de índice de las actas
+    // Fills the index template with general course and teacher information
     function rellenarActaIndex($docIndex, $docActa, $datos0, $datos1, $tutor){
-        // Abrir la primera pestaña del Excel
+        // Open the first sheet of the index document
         $hoja0 = $docIndex->getSheet(0);
         
+        // Access the specific sheet in the acta document
         $fichaAlum = $docActa->getSheet(11);
 
-        // Obtener el curso actual
+        // Calculate the current school year based on the month (usually the course starts in september)
         $curso = (date('n') >= 9) ? date('Y') . "-" . (date('Y') + 1) : (date('Y') - 1) . "-" . date('Y');
 
+        // Fill the cell headers in both documents
         $hoja0->setCellValue("G3", $datos1[$tutor]['grup']);
         $hoja0->setCellValue("G4", $datos1[$tutor]['tutor']);
         $hoja0->setCellValue("G5", $curso);
@@ -33,8 +40,10 @@
         $fichaAlum->setCellValue("K4", $datos1[$tutor]['tutor']);
         $fichaAlum->setCellValue("K5", $curso);
 
+        // Fill teacher and subject list starting from row 13
         $inicioRellenado = 13;
         foreach($datos0 as $profesor){
+            // Filter data to only include subjects belonging to the selected group
             if(str_contains($profesor['grup'], $datos1[$tutor]['grup'])){
                 $hoja0->setCellValue("B" . $inicioRellenado, $profesor['mdas']);
                 $hoja0->setCellValue("C" . $inicioRellenado, $profesor['prof']);
@@ -43,26 +52,26 @@
         }
     }
     
-    // Rellenado de las celdas de la hoja 3
+    // Processes and fills the student data sheet
     function rellenarFichaAlumActa($docActa, $ficheroAlumnos, $datos1, $tutor){
-        // Abrir la tercera pestaña del Excel
+        // Access the specific sheet in the acta document
         $fichaAlum = $docActa->getSheet(11);
 
-        // Array que contendrá a los alumnos del grupo
+        // Array which contains the students
         $grupo = [];
 
-        // Curso al que va (primero o segundo)
+        // Logic to determine the year based on the group name
         $curso = $datos1[$tutor]['grup'][0]%2 == 0 ? "1" : "2";
 
-        // Formateado del nombre del curso para buscarlo en el fichero de alumnos
+        // Format the group name for searching within the XML file
         $nombreGrupo = strtoupper(trim(substr($datos1[$tutor]['grup'], 1)));
         
-        // Bucle que recorre la lista de alumnos
+        // Loop throught the XML student list
         foreach($ficheroAlumnos->alumnos->alumno as $alu){
-            // Parseamos a string para asegurar la compatibilidad de tipos
+            // Parse to string to ensure the compatibility of types
             $grupoXml = (string)$alu['grupo'];
 
-            // If para ver si está en primero o segundo y en que grupo
+            // Match studens based on year and group name
             if(str_contains($grupoXml, $curso) && str_contains($grupoXml, $nombreGrupo)){
                 $grupo[] = [
                     "NIA" => (string)$alu['NIA'],
@@ -90,16 +99,16 @@
             }
         }
 
-        // Eliminamos duplicados porque el fichero xml contiene duplicados
+        // Eliminate duplicated students using NIA as a unique key
         $grupoTemp = [];
         foreach($grupo as $alu){
             $grupoTemp[$alu['NIA']] = $alu;
         }
         $grupo = array_values($grupoTemp);
 
-        // Orden alfabético en español
+        // Sort students alphabetically using Spanish language
         $collator = collator_create('es_ES');
-        // Ordenar el array según apellido1, apellido2 y nombre
+        // Sort the array using apellido1, apellido2 y nombre
         usort($grupo, function($a, $b) use ($collator){
             $comparar = collator_compare($collator, $a['apellido1'], $b['apellido1']);
             if($comparar == 0){
@@ -111,15 +120,12 @@
 
             return $comparar;
         });
-        // print_r($grupo);
 
-        // Desde donde empieza la celda de los alumnos
+        // Fill student data starting from row 9
         $inicioRellenado = 9;
         
-        // Bucle para iniciar el rellenado de cada fila con sus datos
+        // Loop to fill each row with the student data
         foreach($grupo as $alu){
-            //$nombre = "{$alu['apellido1']} {$alu['apellido2']}, {$alu['nombre']}";
-            //$fichaAlum->setCellValue("C" . $inicioRellenado, $nombre);
             $fichaAlum->setCellValue("B" . $inicioRellenado, $alu['NIA']);
             $fichaAlum->setCellValue("C" . $inicioRellenado, $alu['nombre']);
             $fichaAlum->setCellValue("D" . $inicioRellenado, $alu['apellido1']);
@@ -146,27 +152,34 @@
         }
     }
 
-    // Llamada a las funciones
+    // Call to functions
     rellenarActaIndex($docIndex, $docActa, $datos0, $datos1, $grupoForm);
     rellenarFichaAlumActa($docActa, $ficheroAlumnos, $datos1, $grupoForm);
 
     try {
+        // Prepare Excel writers
         $guardarIndex = IOFactory::createWriter($docIndex, "Xlsx");
         $guardarActa = IOFactory::createWriter($docActa, "Xlsx");
 
+        // Temporary file paths fot the generated excels
         $rutaIndex = "actas/index_acta_" . $datos1[$grupoForm]['grup'] . ".xlsx";
         $rutaActa = "actas/acta_" . $datos1[$grupoForm]['grup'] . ".xlsx";
 
+        // Save files to the server
         $guardarIndex->save($rutaIndex);
         $guardarActa->save($rutaActa);
 
+        // Initialize ZipArchive to pachage both files
         $zip = new ZipArchive();
         $rutaZip = "actas/" . (new DateTime())->format("Y-m-d_H-i-s-v") ."_acta.zip";
 
+        // Create the zip file, if it already exists, overwrite it
         if($zip->open($rutaZip, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE){
             $zip->addFile($rutaIndex, "index.xlsx");
             $zip->addFile($rutaActa, "acta.xlsx");
             $zip->close();
+
+            // Delete temporary Excel files
             unlink($rutaIndex);
             unlink($rutaActa);
         }

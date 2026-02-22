@@ -1,4 +1,4 @@
-// Función que usará main.js para verificar el estado de la sesión al cargar la página
+// Function that main.js will use to check session status when the page loads
 export function verificarSesion(){
     return fetch('../php/sessionStatus.php')
     .then(res => res.json())
@@ -10,7 +10,7 @@ export function verificarSesion(){
     });
 }
 
-// Función para manejar el formulario de login
+// Function to handle the login form
 export function iniciarLogin(datosFormulario){
     return fetch('../php/login.php', {
         method: 'POST',

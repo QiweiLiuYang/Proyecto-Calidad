@@ -1,3 +1,4 @@
+<!-- Logic to send the content of "actas" folder content -->
 <?php
     $acta = $_POST['acta'] ?? null;
 

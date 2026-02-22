@@ -1,4 +1,4 @@
-// Función para mostrar el botón de generar acta cuando se han subido ambos archivos
+// Function to display the "generate minutes" button when both files have been uploaded
 function toggleGenerarActa(){
     const divGenerarActa = document.getElementById('divGenerarActa');
     const inputAlumnos = document.getElementById('inputFicheroAlumnos');
@@ -10,9 +10,9 @@ function toggleGenerarActa(){
     }
 }
 
-// Función para la lógica de los contenedores y validación de los archivos
+// Function for container logic and file validation
 export function iniciarSubirFicheros(datos){
-    // Datos que se pasan desde el main.js para reutilizar la función con ambos contenedores
+    // Data passed from main.js to reuse the function with both containers
     const {idContenedor, idInput, idMensajes, idLabel, idBorrar, validarArchivo, icono, textoError} = datos;
 
     const contenedor = document.getElementById(idContenedor);
@@ -24,7 +24,7 @@ export function iniciarSubirFicheros(datos){
     let timeout;
     let accionesNavegador = ['dragenter', 'dragover', 'dragleave', 'drop'];
 
-    // Prevenir las acciones por defecto
+    // Prevent default actions
     accionesNavegador.forEach(accion => {
         contenedor.addEventListener(accion, (e) => {
             e.preventDefault();
@@ -32,7 +32,7 @@ export function iniciarSubirFicheros(datos){
         });
     });
 
-    // Agregar borde rojo cuando se pasa un fichero por encima del contenedor
+    // Add a red border when a file is passed over the container
     const toggleBorde = (rojo) => contenedor.classList.toggle('border-red', rojo);
     contenedor.addEventListener('dragenter', () => toggleBorde(true));
     contenedor.addEventListener('dragover', () => toggleBorde(true));
@@ -40,7 +40,7 @@ export function iniciarSubirFicheros(datos){
     contenedor.addEventListener('drop', () => {toggleBorde(false)});
 
 
-    // Validar el archivo al hacer drop
+    // Validate the file when dropping
     contenedor.addEventListener('drop', (e) => {
         const archivos = e.dataTransfer.files;
         if(archivos.length == 1){
@@ -51,12 +51,12 @@ export function iniciarSubirFicheros(datos){
         }
     });
 
-    // Validar el archivo al seleccionarlo desde el input
+    // Validate the file by selecting it from the input
     input.addEventListener('change', () => {
         if(input.files.length > 0) validar(input.files[0]);
     });
 
-    // Funcionalidad del botón de borrar archivo
+    // Functionality of the delete file button
     btnBorrar.addEventListener('click', () => {
         input.value = '';
         input.disabled = false;
@@ -67,7 +67,7 @@ export function iniciarSubirFicheros(datos){
         toggleGenerarActa();
     });
 
-    // Validar el archivo y mostrar mensajes correspondientes
+    // Validate the file and display corresponding messages
     function validar(archivo){
         clearTimeout(timeout);
         if(validarArchivo(archivo)){
@@ -87,6 +87,7 @@ export function iniciarSubirFicheros(datos){
         }
     }
 
+    // Function to show error message and dissapears in 5 seconds
     function mostrarError(texto){
         mensajes.textContent = texto;
         mensajes.classList.add('text-danger');

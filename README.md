@@ -10,20 +10,23 @@ datos de ambos ficheros.
 ---
 
 ### Características
-1. Diseño 100% responsivo
+1. Diseño responsivo
 2. Seguridad a otro nivel
+3. Gestión de credenciales y sesión
+4. Carga dinámica de la web
+5. Mejorar la calidad de vida de los usuarios
 
 ---
 ### Tecnología usada
 #### Frontend
 * HTML
-* CSS/SCSS
+* CSS
 * Javascript
 * Bootstrap
-* Vue
 
 #### Backend
 * PHP
+* Libreria Phpspreadsheet
 
 ### Instalar dependencias
 Situarse en la carpeta www/php y ejecutar composer install.

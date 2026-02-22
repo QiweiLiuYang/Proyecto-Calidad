@@ -1,54 +1,55 @@
 <?php
+    // Set the response header to JSON format
     header('Content-Type: application/json');
-    // Carga las librerías necesarias
+
+    // Load the PHPSpreadSheet library
     require 'vendor/autoload.php';
     use PhpOffice\PhpSpreadsheet\IOFactory;
 
+    // Get the temporary path of the uploaded file
     $profesores = $_FILES['profesores']['tmp_name'] ?? null;
 
-    // Nombre de la hoja XLSX
-    $xlsx = '25-26 RELACIÓ - Plantilla IES ABASTOS.xlsx';
-    // Cargar el fichero con la librería
+    // Load the Excel file into memory
     $doc = IOFactory::load($profesores);
-    // Obtener la hoja/ventana número 0
+
+    // Access individual worksheets by index
     $hoja0 = $doc->getSheet(0);
-    // Obtener la hoja/ventana número 1
     $hoja1 = $doc->getSheet(1);
 
 
-    // Índice de donde está la cabecera de los datos, en la hoja 0
+    // Index of where the data header on sheet 0
     $filaEncabezado0 = -1;
-    // Índice desde donde empieza los datos, en la hoja 0
+    // Index of where the data starts on sheet 0
     $filaInicioDatos0 = -1;
-    // Índice de donde está la cabecera de los datos, en la hoja 1
+    // Index of where the data header on sheet 1
     $filaEncabezado1 = -1;
-    // Índice desde donde empieza los datos, en la hoja 1
+    // Index of where the data starts on sheet 1
     $filaInicioDatos1 = -1; 
-    // La columna donde está el identificador, en la hoja 0
+    // Column where the identifier is located on sheet 0
     $columna0 = 'A'; 
-    // Identificador usado para localizar el inicio de los datos, por defecto, id. En la hoja 0
+    // Identifier to identificate the start of the data, by default, id. On sheet 0
     $identificador0 = 'id';
-    // La columna del archivo XLSX
+    // Column of the XLSX file
     $columna1 = 'A'; 
-    // Identificador usado para localizar el inicio de los datos, por defecto, id. En la hoja 0
+    // Identifier to identificate the start of the data, by default, group. On sheet 1
     $identificador1 = 'grup';
-    // Array asociativo para vincular cada encabezado en que columna está, de la hoja 0
+    // Associative array to link each header to which column it is in, from sheet 0
     $mapaEncabezado0 = [];
-    // Array asociativo para vincular cada encabezado en que columna está, de la hoja 1
+    // Associative array to link each header to which column it is in, from sheet 1
     $mapaEncabezado1 = [];
-    // Array con los datos obtenidos de la hoja 0
+    // Array with the data obtained from sheet 0
     $datos0 = [];
-    // Array con los datos obtenidos de la hoja 1
+    // Array with the data obtained from sheet 1
     $datos1 = [];
 
-    // Bucle para obtener donde empiezan los datos realmente en la hoja 0, buscamos donde empieza la celda 'Id'
+    // Loop to obtain where the data actually starts on sheet 0. By default, the cell begins with 'Id'
     foreach($hoja0->getRowIterator() as $fila){
-        $indiceFila = $fila->getRowIndex(); // Obtiene el número de la fila actual
+        // Get the number of the actual row
+        $indiceFila = $fila->getRowIndex();
 
-        // Obtiene el valor de la celda de la columa A en la fila actual, quita los espacios blanco y la transforma en minúscula
+        // Get the value from the cell in column A in the current row. Removes the whitespace and converts it to lowercase
         $celdaA = strtolower(trim($hoja0->getCell($columna0 . $indiceFila)->getValue()));
-        // Comparar si la celda A de la fila actual coindice con el identificador dado, si es, actualiza $filaEncabezado0 
-        // y $filaInicioDatos0 y sale del bucle 
+        // Compare if cell A in the current row matches the given identifier, if so, update $filaEncabezado0 and $filaInicioFatos0 and exit the loop
         if($celdaA == $identificador0){
             $filaEncabezado0 = $indiceFila;
             $filaInicioDatos0 = $indiceFila+1;
@@ -56,32 +57,31 @@
         }
     }
 
-    //Si $filaEncabezado0 no ha cambiado, significa que no ha encontrado 'ID' e imprimimos mensaje de error
+    // If $filaEncabezado0 has not changed, it means that it has not found 'ID' an print an error message
     if($filaEncabezado0 == -1){
         echo "Error: No se encontró la cabecera 'ID' en la columna A";
     }else{
-        // Si el contenido de $filaEncabezado0 ha cambiado, es que ha encontrado 'ID', entonces obtenemos la última fila del documento
+        // If the content of $filaEncabezado0 has changed, it means it has found 'ID', so we get the last row of the document
         $ultimaFila = $hoja0->getHighestRow($columna0);
-        // Obtiene el objeto de la fila del encabezado
+        // Gets the object from the header row
         $objetoFila = $hoja0->getRowIterator($filaEncabezado0, $filaEncabezado0)->current();
-        // Obtiene el iterador de las celdas (columas) de esa fila
+        // Gets the iterator of the cells (columns) in that row
         $iteradorCeldas = $objetoFila->getCellIterator();
 
-        // Este bucle foreach itera cada celda para obtener su encabezado y en que columna está para enparejarlo y agregarlo al array
+        // This foreach loop iterates through each cell to get its header and which column it's in, to match it and add it to the array.
         foreach($iteradorCeldas as $celda){
-            // Obtiene la letra de la columna de la celda
+            // Gets the column letter of the cell
             $letra = $celda->getColumn();
-            // Obtiene el contenido (encabezado) de la celda
+            // Gets the content (header) of the cell
             $encabezado = strtoupper(trim($celda->getValue()));
 
-            // Si $encabezado tiene contenido, lo mete en el array asociativo
+            // If $header has content, it puts it into the associative array
             if(!empty($encabezado)){
                 $mapaEncabezado0[$encabezado] = $letra; 
             }
         }
     }
-    //print_r($mapaEncabezado0);
-    // Bucle que obtiene todos los datos de cada fila
+    // Loop that retrieves all the data from each row
     for($fila = $filaInicioDatos0; $fila <= $ultimaFila; $fila++){
         $id = trim($hoja0->getCell($mapaEncabezado0['ID'] . $fila)->getValue());
         $dpt = trim($hoja0->getCell($mapaEncabezado0['DPT'] . $fila)->getValue());
@@ -103,17 +103,16 @@
             "prof" => $prof
         ];
     }
-    // print_r($datos0);
 
-    // Bucle para obtener donde empiezan los datos realmente en la hoja1, buscamos donde empieza la celda 'GRUP'
+    // Loop to find where the data actually starts in sheet1, we look for where the 'GRUP' cell begins
     foreach($hoja1->getRowIterator() as $fila){
-        $indiceFila = $fila->getRowIndex(); // Obtiene el número de la fila actual
+        // Gets the current row number
+        $indiceFila = $fila->getRowIndex();
 
-        // Obtiene el valor de la celda de la columa A en la fila actual, quita los espacios blanco y la transforma en minúscula
+        // Gets the value from the cell in column A in the current row, removes the whitespace, and converts it to lowercase.
         $celdaA = strtolower(trim($hoja1->getCell($columna1 . $indiceFila)->getValue()));
         
-        // Comparar si la celda A de la fila actual coindice con el identificador dado, si es, actualiza $filaEncabezado1 
-        // y $filaInicioDatos1 y sale del bucle 
+        // Compare if cell A of the current row matches the given identifier; if so, update $filaEncabezado1 and $filaInicioDatos1 and exit the loop
         if($celdaA == $identificador1){
             $filaEncabezado1 = $indiceFila;
             $filaInicioDatos1 = $indiceFila+1;
@@ -121,37 +120,33 @@
         }
     }
 
-    //Si $filaEncabezado1 no ha cambiado, significa que no ha encontrado 'GRUP' e imprimimos mensaje de error
+    // If $filaEncabezado1 has not changed, it means that 'GRUP' has not been found and we print an error message
     if($filaEncabezado1 == -1){
         echo "Error: No se encontró la cabecera 'ID' en la columna A";
     }else{
-        // Si el contenido de $filaEncabezado1 ha cambiado, es que ha encontrado 'GRUP', entonces obtenemos la
-        //  última fila del documento
+        // If the content of $filaEncabezado1 has changed, it means it has found 'GRUP', so we get the last row of the document.
         $ultimaFila = $hoja1->getHighestRow($columna1);
-        // Obtiene el objeto de la fila del encabezado
+        // Gets the object from the header row
         $objetoFila = $hoja1->getRowIterator($filaEncabezado1, $filaEncabezado1)->current();
-        // Obtiene el iterador de las celdas (columas) de esa fila
+        // Gets the iterator of the cells (columns) in that row
         $iteradorCeldas = $objetoFila->getCellIterator();
 
-        // Este bucle foreach itera cada celda para obtener su encabezado y en que columna está para enparejarlo
-        //  y agregarlo al array
+        // This foreach loop iterates through each cell to get its header and the column it's in, to match it and add it to the array
         foreach($iteradorCeldas as $celda){
-            // Obtiene la letra de la columna de la celda
+            // Gets the column letter of the cell
             $letra = $celda->getColumn();
-            // Obtiene el contenido (encabezado) de la celda
+            // Gets the content (header) of the cell
             $encabezado = strtoupper(trim($celda->getValue()));
 
-            // Si $encabezado tiene contenido, lo mete en el array asociativo
+            // If $header has content, it puts it into the associative array
             if(!empty($encabezado)){
                 $mapaEncabezado1[$encabezado] = $letra; 
             }
         }
     }
 
-    // print_r($mapaEncabezado1);
-
     $indiceXMatriz = 0;
-    // Bucle que obtiene todos los datos de cada fila
+    // Loop that retrieves all the data from each row
     for($fila = $filaInicioDatos1; $fila <= $ultimaFila; $fila++){
         $grup = trim($hoja1->getCell($mapaEncabezado1['GRUP'] . $fila)->getValue());
         $tutor = trim($hoja1->getCell($mapaEncabezado1['TUTOR'] . $fila)->getValue());
@@ -162,8 +157,6 @@
         ];
         $indiceXMatriz++;
     }
-
-    // print_r($datos1);
 
     echo json_encode($datos1, JSON_PRETTY_PRINT);
 ?>
