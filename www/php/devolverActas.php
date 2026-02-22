@@ -35,3 +35,4 @@
 
     // Send the response
     echo json_encode($resultado);
+?>

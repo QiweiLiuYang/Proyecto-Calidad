@@ -7,3 +7,4 @@
     }else{
         echo json_encode(['logged' => false]);
     }
+?>

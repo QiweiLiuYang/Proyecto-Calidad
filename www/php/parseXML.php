@@ -8,3 +8,4 @@
     }else{
         die("Error: No se ha recibido ningún archivo XML");
     }
+?>
