@@ -161,17 +161,17 @@
     rellenarFichaAlumActa($docActa, $ficheroAlumnos, $datos1, $grupoForm);
 
     try {
-        $directorioActas = __DIR__ . '/actas';
+        $dirActas = __DIR__ . '/actas';
 
         // Prepare Excel writers
         $guardarIndex = IOFactory::createWriter($docIndex, "Xlsx");
         $guardarActa = IOFactory::createWriter($docActa, "Xlsx");
 
-        $nombreGrupoSeguro = preg_replace('/[^a-zA-Z0-9_\-]/', '_', $datos1[$grupoForm]['grup']);
+        $nombreGrupo = preg_replace('/[^A-Za-z0-9_\-]/', '_', $datos1[$grupoForm]['grup']);
 
         // Temporary file paths fot the generated excels
-        $rutaIndex = $directorioActas . "/index_acta_" . $nombreGrupoSeguro . ".xlsx";
-        $rutaActa = $directorioActas . "/acta_" . $nombreGrupoSeguro . ".xlsx";
+        $rutaIndex = $dirActas . "/index_acta_" . $nombreGrupo . ".xlsx";
+        $rutaActa = $dirActas . "/acta_" . $nombreGrupo . ".xlsx";
 
         // Save files to the server
         $guardarIndex->save($rutaIndex);
@@ -179,7 +179,7 @@
 
         // Initialize ZipArchive to pachage both files
         $zip = new ZipArchive();
-        $rutaZip = "actas/" . (new DateTime())->format("Y-m-d_H-i-s-v") ."_acta.zip";
+        $rutaZip = $dirActas . "/" . (new DateTime())->format("Y-m-d_H-i-s-v") ."_acta.zip";
 
         // Create the zip file, if it already exists, overwrite it
         if($zip->open($rutaZip, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE){
@@ -191,8 +191,7 @@
             unlink($rutaIndex);
             unlink($rutaActa);
         }
-
-    } catch (Throwable $e) {
+    } catch (\Throwable $e) {
         // 500 Internal Server Error
         http_response_code(500);
         echo "Error al guardar: " . $e->getMessage();
