@@ -181,6 +181,8 @@ function configurarContenedores(){
                 body: formData
             })
             .then(res => {
+                if(!res.ok) throw new Error("Hubo un problema al generar las actas en el servidor.");
+
                 const contenedorActas = document.getElementById("contenedorActas");
                 const borrarEstudiantes = document.getElementById("borrarEstudiantes");
                 const borrarProfesores = document.getElementById("borrarProfesores");

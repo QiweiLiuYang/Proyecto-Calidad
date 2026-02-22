@@ -157,6 +157,4 @@
         ];
         $indiceXMatriz++;
     }
-
-    echo json_encode($datos1, JSON_PRETTY_PRINT);
 ?>

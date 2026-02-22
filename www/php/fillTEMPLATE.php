@@ -10,7 +10,11 @@
 
     // Get the selected group from the POST request and validate that is a valid group
     $grupoForm = $_POST['grupo'] ?? null;
-    if($grupoForm === null || !isset($datos1[$grupoForm])) die("Error: No se ha recibido un grupo válido");
+    if($grupoForm === null || !isset($datos1[$grupoForm])){
+        // 400 Bad Request
+        http_response_code(400);
+        die("Error: No se ha recibido un grupo válido");
+    }
 
     // Path of the template files
     $acta = "plantilla.xlsx";
@@ -185,6 +189,8 @@
         }
 
     } catch (Exception $e) {
+        // 500 Internal Server Error
+        http_response_code(500);
         echo "Error al guardar: " . $e->getMessage();
     }
 ?>
