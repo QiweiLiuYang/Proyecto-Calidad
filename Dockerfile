@@ -25,21 +25,15 @@ RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
 
 RUN a2enmod ssl rewrite headers
 
-ARG REPO_URL="https://github.com/QiweiLiuYang/Proyecto-Calidad"
+COPY apache-config.conf /etc/apache2/sites-available/000-default.conf
 
-RUN rm -rf /var/www/html/* \
-    && git clone ${REPO_URL} /tmp/repo \
-    && mv /tmp/repo/www/* /var/www/html/ \
-    && rm -rf /tmp/repo
+COPY --chown=www-data:www-data www/ /var/www/html/
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 RUN cd /var/www/html/php && composer install --no-dev --optimize-autoloader
 
-COPY apache-config.conf /etc/apache2/sites-available/000-default.conf
-
 RUN mkdir -p /var/www/html/php/actas \
-    && chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html \
     && chmod -R 775 /var/www/html/php/actas
 
