@@ -1,10 +1,9 @@
 <?php
-    // Set the response header to JSON format
-    header('Content-Type: application/json');
-
     // Include the file containing the HTML structure for the dropdowns
     include_once 'dropdownContent.php';
-    
+
+    // Set the response header to JSON format
+    header('Content-Type: application/json');
     // Define the session cookie lifetime to 10 hours if remember me is selected, otherwise, until the browser is closed
     $duracionCookie = 0;
     if(isset($_POST['recordar']) && $_POST['recordar'] == "si"){

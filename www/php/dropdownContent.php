@@ -1,4 +1,3 @@
-<!-- Html content -->
 <?php
     $html = '
         <div class="container-sm mt-5">
