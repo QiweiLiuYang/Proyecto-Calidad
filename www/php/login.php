@@ -2,9 +2,7 @@
     ob_start();
     // Include the file containing the HTML structure for the dropdowns
     include_once 'dropdownContent.php';
-    ob_clean();
-    // Set the response header to JSON format
-    header('Content-Type: application/json');
+
     // Define the session cookie lifetime to 10 hours if remember me is selected, otherwise, until the browser is closed
     $duracionCookie = 0;
     if(isset($_POST['recordar']) && $_POST['recordar'] == "si"){
@@ -36,9 +34,14 @@
         $_SESSION['loggedin'] = true;
         $_SESSION['ua'] = $_SERVER['HTTP_USER_AGENT'];
 
-        echo json_encode(['success'=> $_SESSION['loggedin'], 'html' => $html]);
+        $respuesta = ['success'=> $_SESSION['loggedin'], 'html' => $html];
     } else {
         // Return 401 Unauthorized if credentials do not match
         http_response_code(401);
     }
-    ob_end_flush();
+    ob_end_clean();
+
+    // Set the response header to JSON format
+    header('Content-Type: application/json');
+    echo json_encode($respuesta);
+    exit;
