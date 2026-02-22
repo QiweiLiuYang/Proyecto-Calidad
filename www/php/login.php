@@ -23,8 +23,8 @@
     session_start();
 
     // Get the credentials from POST request
-    $usuario = $_POST['usuario'] ?? '';
-    $contrasena = $_POST['contrasena'] ?? '';
+    $usuario = trim($_POST['usuario'] ?? '');
+    $contrasena = trim($_POST['contrasena'] ?? '');
 
     // Credentials for validation
     $usuario_valido = 'admin';
