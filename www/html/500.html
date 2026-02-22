@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error 500 - Problema Interno</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fffaf0; /* Un tono crema suave para diferenciarlo */
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        .container {
+            max-width: 500px;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 8rem;
+            margin: 0;
+            color: #f39c12; /* Naranja/Ámbar para indicar advertencia */
+        }
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        .btn {
+            text-decoration: none;
+            background-color: #e67e22;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 5px;
+            transition: background 0.3s;
+            display: inline-block;
+        }
+        .btn:hover {
+            background-color: #d35400;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>500</h1>
+        <h2>Algo salió mal en nuestros servidores</h2>
+        <p>Estamos teniendo dificultades técnicas para procesar tu solicitud. Ya estamos trabajando para solucionarlo.</p>
+        <a href="javascript:location.reload();" class="btn">Reintentar carga</a>
+    </div>
+
+</body>
+</html>
