@@ -161,13 +161,17 @@
     rellenarFichaAlumActa($docActa, $ficheroAlumnos, $datos1, $grupoForm);
 
     try {
+        $directorioActas = __DIR__ . '/actas';
+
         // Prepare Excel writers
         $guardarIndex = IOFactory::createWriter($docIndex, "Xlsx");
         $guardarActa = IOFactory::createWriter($docActa, "Xlsx");
 
+        $nombreGrupoSeguro = preg_replace('/[^a-zA-Z0-9_\-]/', '_', $datos1[$grupoForm]['grup']);
+
         // Temporary file paths fot the generated excels
-        $rutaIndex = "actas/index_acta_" . $datos1[$grupoForm]['grup'] . ".xlsx";
-        $rutaActa = "actas/acta_" . $datos1[$grupoForm]['grup'] . ".xlsx";
+        $rutaIndex = $directorioActas . "/index_acta_" . $nombreGrupoSeguro . ".xlsx";
+        $rutaActa = $directorioActas . "/acta_" . $nombreGrupoSeguro . ".xlsx";
 
         // Save files to the server
         $guardarIndex->save($rutaIndex);
@@ -188,7 +192,7 @@
             unlink($rutaActa);
         }
 
-    } catch (Exception $e) {
+    } catch (Throwable $e) {
         // 500 Internal Server Error
         http_response_code(500);
         echo "Error al guardar: " . $e->getMessage();
